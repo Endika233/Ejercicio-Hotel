@@ -41,6 +41,9 @@ namespace Ejercicio_Hotel
                 case 2:
                     EditarCliente();
                     break;
+                case 3:
+                    CheckIn();
+                    break;
             }
         }
         public static void RegistrarCliente()
@@ -104,21 +107,34 @@ namespace Ejercicio_Hotel
 
             conexion.Close();
         }
+        public static void CheckIn()
+        {
+            string dni;
+            conexion.Open();
+
+            SqlDataReader match;
+           
+            Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
+            dni = Console.ReadLine();
+            cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+            comando = new SqlCommand(cadena, conexion);
+            match = comando.ExecuteReader();
+            if (!match.Read())
+            {
+                 Console.WriteLine("\nEl cliente no esta registrado");
+            }
+            else
+            {
+
+            }
+            match.Close();
+            
+        }
 
     }
 }
-//Registrar cliente: Aquí registramos un nuevo cliente, puesto que no se puede reserva una habitación si previamente
-//no se a registrado al cliente.Haremos un método RegistrarCliente() en el cual pediremos por teclado
-//el nombre, apellido y DNI y haremos un Insert a la tabla de Clientes.
-
-//Editar cliente: Aquí tendremos la opción de cambiar el nombre y el apellido de un cliente que ya está registrado en la BBDD.
-//para ello crearemos un método EditarCliente(String DNI). Pediremos por teclado el DNI del cliente al que queremos cambiar 
-//los datos.Nos lo pedirá continuamente  hasta que el DNI introducido sea correcto.
-//Entonces le pediremos que nos introduzca el Nombre y el Apellido de nuevo.
-
 //Check-in: Aquí pediremos el DNI del cliente que quiere hacer la reserva.Si el cliente no existe en la tabla clientes
 //aparecerá un mensaje que nos indique que el cliente no está registrado y por lo tanto no puede hacer una reserva. 
-
 //Si el cliente está registrado, le aparecerá un listado con las habitaciones disponibles del hotel para que seleccione 
 //la que quiera reservar.Una vez validado que el número de la habitación que ha introducido es correcto,
 //tendremos que hacer un update a la tabla de HABITACIONES para poner la habitación como ocupada.
