@@ -10,6 +10,7 @@ namespace Ejercicio_Hotel
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
