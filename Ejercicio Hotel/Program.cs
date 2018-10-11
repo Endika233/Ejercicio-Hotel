@@ -38,6 +38,9 @@ namespace Ejercicio_Hotel
                 case 1:
                     RegistrarCliente();
                     break;
+                case 2:
+                    EditarCliente();
+                    break;
             }
         }
         public static void RegistrarCliente()
@@ -59,7 +62,6 @@ namespace Ejercicio_Hotel
                 dni = Console.ReadLine();
                 cont = cont + 1;
             } while (dni.Length!=9);
-            //Falta entrar los datos
             cadena = "INSERT INTO HUESPED VALUES ('"+nomb+"', '"+ape+"', '"+dni+"')";
             comando = new SqlCommand(cadena, conexion);
             comando.ExecuteNonQuery();
@@ -67,6 +69,40 @@ namespace Ejercicio_Hotel
 
             conexion.Close();
             Menu();
+        }
+        public static void EditarCliente()
+        { string dni,nomb,ape;
+            conexion.Open();            
+            int cont = 0;
+            bool ok = false;
+            SqlDataReader match;
+            do
+            {
+                if (cont > 0)
+                {
+                    Console.WriteLine("\nEl DNI introducido no es correcto (no usar guión)");
+                }
+                Console.WriteLine("\nIntroduzca el DNI del cliente que desee editar");
+                dni = Console.ReadLine();
+                cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+                comando = new SqlCommand(cadena, conexion);
+                match = comando.ExecuteReader();     
+                if (match.Read())
+                {
+                    ok = true;
+                }
+                cont++;
+                match.Close();
+            } while (!ok);
+            Console.WriteLine("\nIntroduzca el nuevo nombre ");
+            nomb = Console.ReadLine();
+            Console.WriteLine("\nIntroduzca el nuevo apellido");
+            ape = Console.ReadLine();
+            cadena = "UPDATE HUESPED SET nombre='" + nomb + "',apellido='" + ape + "' WHERE DNI LIKE '"+dni+"'";
+            comando = new SqlCommand(cadena, conexion);
+            comando.ExecuteNonQuery();
+
+            conexion.Close();
         }
 
     }
