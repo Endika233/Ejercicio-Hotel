@@ -110,6 +110,7 @@ namespace Ejercicio_Hotel
         public static void CheckIn()
         {
             string dni;
+            int habSel;
             conexion.Open();
 
             SqlDataReader match;
@@ -125,9 +126,24 @@ namespace Ejercicio_Hotel
             }
             else
             {
-
+                match.Close();
+                Console.WriteLine("\nSeleccione número de habitación para el huésped\n");
+                cadena = "SELECT [NumHab] FROM HABITACION WHERE ESTADO like 'l'";
+                comando = new SqlCommand(cadena, conexion);
+                SqlDataReader habitL = comando.ExecuteReader();
+                while (habitL.Read())
+                {
+                    Console.Write(habitL["NumHab"]+"  ");
+                }
+                habitL.Close();
+                Console.WriteLine("\n");
+                habSel = Int32.Parse(Console.ReadLine());
+                cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
             }
             match.Close();
+
             
         }
 
