@@ -141,10 +141,13 @@ namespace Ejercicio_Hotel
                 cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
+                //FALTA GENERAR CODIGO DE RESERVA IGUAL A 1, CADA QUE EJECUTES ESTA PARTE TIENE QUE COGER EL CODIGO DE RESERVA ANTERIO SUMARLE UNO Y CREAR UNA LINE DONDE VA IR EL CHECKIN Y LO DEMAS
+                cadena = "UPDATE RESERVAS SET CHECKIN='" + DateTime.Today.ToString("dd-MM-yyyy") + "' WHERE DNI_HUESPED LIKE '" + dni + "'";
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
             }
             match.Close();
-
-            
+           
         }
 
     }
