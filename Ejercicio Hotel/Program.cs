@@ -44,6 +44,9 @@ namespace Ejercicio_Hotel
                 case 3:
                     CheckIn();
                     break;
+                case 4:
+                    CheckOut();
+                    break;
             }
         }
         public static void RegistrarCliente()
@@ -96,7 +99,7 @@ namespace Ejercicio_Hotel
                 }
                 cont++;
                 match.Close();
-            } while (!ok);
+            } while (!ok);//TODO:Introducir en los bucles opción de salir
             Console.WriteLine("\nIntroduzca el nuevo nombre ");
             nomb = Console.ReadLine();
             Console.WriteLine("\nIntroduzca el nuevo apellido");
@@ -104,8 +107,9 @@ namespace Ejercicio_Hotel
             cadena = "UPDATE HUESPED SET nombre='" + nomb + "',apellido='" + ape + "' WHERE DNI LIKE '"+dni+"'";
             comando = new SqlCommand(cadena, conexion);
             comando.ExecuteNonQuery();
-
+           
             conexion.Close();
+            Menu();
         }
         public static void CheckIn()
         {
@@ -151,18 +155,40 @@ namespace Ejercicio_Hotel
                 }
                 codReserva.Close();
 
-                cadena = "INSERT INTO RESERVAS (CODRESERVA,DNI_HUESPED,NUMHAB,CHECKIN) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+",'"+ DateTime.UtcNow.ToString() +"')";
+                cadena = "INSERT INTO RESERVAS (CODRESERVA,DNI_HUESPED,NUMHAB,CHECKIN) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+",'"+ DateTime.UtcNow.ToString() +"')";//TODO:1Hora universal metida, las otras daban error 2mirar como sumar dos horas ELSE cambiar datetime en BBDD a date
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
             }
             match.Close();
+            conexion.Close();
+            Menu();
            
         }
+        public static void CheckOut()
+        {
+            string dni;
+            SqlDataReader match;
+            conexion.Open();
 
+            Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
+            dni = Console.ReadLine();
+            cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+            comando = new SqlCommand(cadena, conexion);
+            match = comando.ExecuteReader();
+            if (!match.Read())
+            {
+                Console.WriteLine("\nEl cliente no esta registrado");
+            }
+            else//  update reservas set CheckOut=2000-01-01 where DNI_Huesped like '72407751W' and CodReserva=(select max(CodReserva) from Reservas where DNI_Huesped like '72407751w')
+            {
+                cadena="UPDATE RESERVAS SET CHECKOUT='"+ DateTime.UtcNow.ToString()+"' "
+            }
+        }
+
+
+        //Checkout: Aqui tendreis que hacer un método CheckOut(String DNI, ). Dado un DNI correcto, se harán dos updates.
+        //Uno a la tabla RESERVAS, el cual ingresará la fecha del checkOut y 
+        //otro a la tabla HABITACIONES que pondrá la habitación a disponible.
     }
 }
-//Check-in: Aquí pediremos el DNI del cliente que quiere hacer la reserva.Si el cliente no existe en la tabla clientes
-//aparecerá un mensaje que nos indique que el cliente no está registrado y por lo tanto no puede hacer una reserva. 
-//Si el cliente está registrado, le aparecerá un listado con las habitaciones disponibles del hotel para que seleccione 
-//la que quiera reservar.Una vez validado que el número de la habitación que ha introducido es correcto,
-//tendremos que hacer un update a la tabla de HABITACIONES para poner la habitación como ocupada.
+
