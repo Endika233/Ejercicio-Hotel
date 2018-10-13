@@ -110,10 +110,10 @@ namespace Ejercicio_Hotel
         public static void CheckIn()
         {
             string dni;
-            int habSel;
+            int habSel, newCodReserva=0;
             conexion.Open();
 
-            SqlDataReader match;
+            SqlDataReader match,codReserva;
            
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
@@ -133,7 +133,7 @@ namespace Ejercicio_Hotel
                 SqlDataReader habitL = comando.ExecuteReader();
                 while (habitL.Read())
                 {
-                    Console.Write(habitL["NumHab"]+"  ");
+                    Console.Write(habitL["NumHab"]+"  ");//LA LISTA DE LAS HABITACIONES LIBRES
                 }
                 habitL.Close();
                 Console.WriteLine("\n");
@@ -141,8 +141,17 @@ namespace Ejercicio_Hotel
                 cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
-                //FALTA GENERAR CODIGO DE RESERVA IGUAL A 1, CADA QUE EJECUTES ESTA PARTE TIENE QUE COGER EL CODIGO DE RESERVA ANTERIO SUMARLE UNO Y CREAR UNA LINE DONDE VA IR EL CHECKIN Y LO DEMAS(PRIMERA RESERVA PONERLA TU EN LA BBDD)
-                cadena = "UPDATE RESERVAS SET CHECKIN='" + DateTime.Today.ToString("dd-MM-yyyy") + "' WHERE DNI_HUESPED LIKE '" + dni + "'";
+                // CADA QUE EJECUTES ESTA PARTE TIENE QUE COGER EL CODIGO DE RESERVA ANTERIO SUMARLE UNO Y CREAR UNA LINE DONDE VA IR EL CHECKIN Y LO DEMAS(PRIMERA RESERVA PONERLA TU EN LA BBDD)
+                cadena = "SELECT MAX(CODRESERVA) FROM RESERVAS ";//MIRAR COMO COGER EL ULTIMO
+                comando = new SqlCommand(cadena, conexion);
+                codReserva=comando.ExecuteReader();
+                if (codReserva.Read())//TODO:preguntar porque hace falta el if 
+                {
+                    newCodReserva = Int32.Parse(codReserva[0].ToString())+1;// TODO: mirar porque esta fuera de rango con nombre de columna
+                }
+                codReserva.Close();
+
+                cadena = "INSERT INTO RESERVAS (CODRESERVA) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+","+ DateTime.Today.ToString("dd-MM-yyyy")+")";
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
             }
