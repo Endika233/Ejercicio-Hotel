@@ -177,12 +177,21 @@ namespace Ejercicio_Hotel
             match = comando.ExecuteReader();
             if (!match.Read())
             {
-                Console.WriteLine("\nEl cliente no esta registrado");
+                Console.WriteLine("\nEl cliente no esta registrado");//TODO:tiene que comprobar que el checkout ultimo sea null
             }
-            else//  update reservas set CheckOut=2000-01-01 where DNI_Huesped like '72407751W' and CodReserva=(select max(CodReserva) from Reservas where DNI_Huesped like '72407751w')
+            else
             {
-                cadena="UPDATE RESERVAS SET CHECKOUT='"+ DateTime.UtcNow.ToString()+"' "
+                match.Close();
+                cadena = "UPDATE RESERVAS SET CHECKOUT='" + DateTime.UtcNow.ToString() + "' WHERE DNI_HUESPED LIKE '"+dni+"' AND CODRESERVA=(SELECT MAX(CODRESERVA) FROM RESERVAS WHERE DNI_HUESPED LIKE '"+dni+"')";
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
+                cadena = "UPDATE HABITACION SET ESTADO='l' WHERE NUMHAB=(SELECT NUMHAB FROM RESERVAS WHERE CODRESERVA=(SELECT MAX(CODRESERVA) FROM RESERVAS WHERE DNI_HUESPED LIKE '"+dni+"'))";
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
             }
+            match.Close();
+            conexion.Close();
+            Menu();
         }
 
 
