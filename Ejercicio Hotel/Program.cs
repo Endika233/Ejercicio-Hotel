@@ -90,7 +90,7 @@ namespace Ejercicio_Hotel
                 }
                 Console.WriteLine("\nIntroduzca el DNI del cliente que desee editar");
                 dni = Console.ReadLine();
-                cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+                cadena = "SELECT * FROM HUESPED WHERE DNI LIKE '" + dni + "'";
                 comando = new SqlCommand(cadena, conexion);
                 match = comando.ExecuteReader();     
                 if (match.Read())
@@ -121,7 +121,7 @@ namespace Ejercicio_Hotel
            
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
-            cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+            cadena = "SELECT * FROM HUESPED WHERE DNI LIKE '" + dni + "'";
             comando = new SqlCommand(cadena, conexion);
             match = comando.ExecuteReader();
             if (!match.Read())
@@ -172,12 +172,13 @@ namespace Ejercicio_Hotel
 
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
-            cadena = "SELECT * FROM HUESPED WHERE DNI='" + dni + "'";
+            // select * from Reservas where CheckOut is null and DNI_Huesped like '12345678a'
+            cadena = "SELECT * FROM RESERVAS WHERE CHECKOUT IS NULL AND DNI_HUESPED LIKE '" + dni + "'";
             comando = new SqlCommand(cadena, conexion);
             match = comando.ExecuteReader();
             if (!match.Read())
             {
-                Console.WriteLine("\nEl cliente no esta registrado");//TODO:tiene que comprobar que el checkout ultimo sea null
+                Console.WriteLine("\nEl cliente no se encuentra en el hotel o no esta registrado");//TODO:tiene que comprobar que el checkout ultimo sea null
             }
             else
             {
