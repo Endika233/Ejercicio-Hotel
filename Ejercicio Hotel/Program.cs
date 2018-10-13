@@ -151,7 +151,7 @@ namespace Ejercicio_Hotel
                 }
                 codReserva.Close();
 
-                cadena = "INSERT INTO RESERVAS (CODRESERVA,DNI_HUESPED,NUMHAB,CHECKIN) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+","+ DateTime.Now.ToString("yyyy-MM-dd")+")";//TODO:hay un problema con los formatos de fecha
+                cadena = "INSERT INTO RESERVAS (CODRESERVA,DNI_HUESPED,NUMHAB,CHECKIN) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+",'"+ DateTime.UtcNow.ToString() +"')";
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
             }
