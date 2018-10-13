@@ -141,8 +141,8 @@ namespace Ejercicio_Hotel
                 cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
-                // CADA QUE EJECUTES ESTA PARTE TIENE QUE COGER EL CODIGO DE RESERVA ANTERIO SUMARLE UNO Y CREAR UNA LINE DONDE VA IR EL CHECKIN Y LO DEMAS(PRIMERA RESERVA PONERLA TU EN LA BBDD)
-                cadena = "SELECT MAX(CODRESERVA) FROM RESERVAS ";//MIRAR COMO COGER EL ULTIMO
+                
+                cadena = "SELECT MAX(CODRESERVA) FROM RESERVAS ";
                 comando = new SqlCommand(cadena, conexion);
                 codReserva=comando.ExecuteReader();
                 if (codReserva.Read())//TODO:preguntar porque hace falta el if 
@@ -151,7 +151,7 @@ namespace Ejercicio_Hotel
                 }
                 codReserva.Close();
 
-                cadena = "INSERT INTO RESERVAS (CODRESERVA) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+","+ DateTime.Today.ToString("dd-MM-yyyy")+")";
+                cadena = "INSERT INTO RESERVAS (CODRESERVA,DNI_HUESPED,NUMHAB,CHECKIN) VALUES (" + newCodReserva+",'"+dni+"',"+habSel+","+ DateTime.Now.ToString("yyyy-MM-dd")+")";//TODO:hay un problema con los formatos de fecha
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
             }
