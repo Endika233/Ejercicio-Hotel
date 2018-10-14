@@ -236,6 +236,7 @@ namespace Ejercicio_Hotel
         //    }
         //    conexion.Close();
         //    }
+        //TODO:Hacer un método para comprobar si el dni esta en la bbdd(pero el mensaje a escribir en cada caso que se usa es diferente)
     }
 }
 
