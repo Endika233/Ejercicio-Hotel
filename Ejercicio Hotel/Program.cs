@@ -16,13 +16,13 @@ namespace Ejercicio_Hotel
     
         static void Main(string[] args)
         {
+            Console.WriteLine("\t\t\t\t\tBienvenido a Hotel Boutique Helene");
             Menu();
             Console.ReadLine();
         }
         public static void Menu()
         {
-            int option,cont=0;
-            Console.WriteLine("\t\t\t\t\tBienvenido a Hotel Boutique Helene");
+            int option, cont = 0;                     
             do
             {
                 if (cont > 0)
@@ -47,10 +47,14 @@ namespace Ejercicio_Hotel
                 case 4:
                     CheckOut();
                     break;
+                case 5:
+                    Salir();
+                    break; 
             }
         }
         public static void RegistrarCliente()
         {
+            Console.WriteLine("\n\tHa elegido la opción Registrar Cliente");
             conexion.Open();
             string nomb, ape, dni;
             int cont=0;
@@ -62,22 +66,25 @@ namespace Ejercicio_Hotel
             {
                 if (cont > 0)
                 {
-                    Console.WriteLine("\nEl DNI introducido no es correcto (no usar guión)");
+                    Console.WriteLine("\nEl DNI introducido no es correcto (no usar guión) o introduzca 'esc' para salir del menú Registrar Cliente");
                 }
                 Console.WriteLine("\nIntroduzca DNI del cliente (9 dígitos)");
-                dni = Console.ReadLine();
+                dni = Console.ReadLine().ToUpper();
                 cont = cont + 1;
-            } while (dni.Length!=9);
-            cadena = "INSERT INTO HUESPED VALUES ('"+nomb+"', '"+ape+"', '"+dni+"')";
-            comando = new SqlCommand(cadena, conexion);
-            comando.ExecuteNonQuery();
-      
-
+            } while (dni.Length!=9&&dni!="ESC");
+            if (dni.Length == 9)
+            {
+                cadena = "INSERT INTO HUESPED VALUES ('" + nomb + "', '" + ape + "', '" + dni + "')";
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
+            }      
             conexion.Close();
             Menu();
         }
         public static void EditarCliente()
-        { string dni,nomb,ape;
+        {
+            Console.WriteLine("\n\tHa elegido la opción Editar Cliente");
+            string dni,nomb,ape;
             conexion.Open();            
             int cont = 0;
             bool ok = false;
@@ -88,8 +95,8 @@ namespace Ejercicio_Hotel
                 {
                     Console.WriteLine("\nEl DNI introducido no es correcto (no usar guión)");
                 }
-                Console.WriteLine("\nIntroduzca el DNI del cliente que desee editar");
-                dni = Console.ReadLine();
+                Console.WriteLine("\nIntroduzca el DNI del cliente que desee editar o introduzca 'esc' para salir del Editor de Clientes");
+                dni = Console.ReadLine().ToUpper();
                 cadena = "SELECT * FROM HUESPED WHERE DNI LIKE '" + dni + "'";
                 comando = new SqlCommand(cadena, conexion);
                 match = comando.ExecuteReader();     
@@ -99,20 +106,23 @@ namespace Ejercicio_Hotel
                 }
                 cont++;
                 match.Close();
-            } while (!ok);//TODO:Introducir en los bucles opción de salir
-            Console.WriteLine("\nIntroduzca el nuevo nombre ");
-            nomb = Console.ReadLine();
-            Console.WriteLine("\nIntroduzca el nuevo apellido");
-            ape = Console.ReadLine();
-            cadena = "UPDATE HUESPED SET nombre='" + nomb + "',apellido='" + ape + "' WHERE DNI LIKE '"+dni+"'";
-            comando = new SqlCommand(cadena, conexion);
-            comando.ExecuteNonQuery();
-           
+            } while (!ok&&dni!="ESC");//TODO:Introducir en los bucles opción de salir
+            if (ok)
+            {
+                Console.WriteLine("\nIntroduzca el nuevo nombre ");
+                nomb = Console.ReadLine();
+                Console.WriteLine("\nIntroduzca el nuevo apellido");
+                ape = Console.ReadLine();
+                cadena = "UPDATE HUESPED SET nombre='" + nomb + "',apellido='" + ape + "' WHERE DNI LIKE '" + dni + "'";
+                comando = new SqlCommand(cadena, conexion);
+                comando.ExecuteNonQuery();
+            }//TODO: has cambiado el bucle para que salga con esc, comprobar
             conexion.Close();
             Menu();
         }
         public static void CheckIn()
         {
+            Console.WriteLine("\n\tHa elegido la opción CheckIn");
             string dni;
             int habSel, newCodReserva=0;
             conexion.Open();
@@ -166,13 +176,13 @@ namespace Ejercicio_Hotel
         }
         public static void CheckOut()
         {
+            Console.WriteLine("\n\tHa elegido la opción CheckOut");
             string dni;
             SqlDataReader match;
             conexion.Open();
 
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
-            // select * from Reservas where CheckOut is null and DNI_Huesped like '12345678a'
             cadena = "SELECT * FROM RESERVAS WHERE CHECKOUT IS NULL AND DNI_HUESPED LIKE '" + dni + "'";
             comando = new SqlCommand(cadena, conexion);
             match = comando.ExecuteReader();
@@ -194,11 +204,10 @@ namespace Ejercicio_Hotel
             conexion.Close();
             Menu();
         }
-
-
-        //Checkout: Aqui tendreis que hacer un método CheckOut(String DNI, ). Dado un DNI correcto, se harán dos updates.
-        //Uno a la tabla RESERVAS, el cual ingresará la fecha del checkOut y 
-        //otro a la tabla HABITACIONES que pondrá la habitación a disponible.
+        public static void Salir()
+        {
+            Console.WriteLine("\nQue tenga un buen día");//TODO: poner un mensaje con la opcion que se ha elegido 
+        }
     }
 }
 
