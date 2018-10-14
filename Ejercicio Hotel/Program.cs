@@ -124,7 +124,7 @@ namespace Ejercicio_Hotel
         {
             Console.WriteLine("\n\tHa elegido la opción CheckIn");
             string dni;
-            int habSel, newCodReserva=0;
+            int habSel, newCodReserva=0;//TODO: Podias haber usado el AUTO_INCREMENT para el nuevo codreserva??(identity(1,1) en sql server)**Primero es el número, segundo la suma
             SqlDataReader match,codReserva;
            
             conexion.Open();
