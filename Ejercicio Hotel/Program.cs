@@ -206,7 +206,7 @@ namespace Ejercicio_Hotel
         }
         public static void Salir()
         {
-            Console.WriteLine("\nQue tenga un buen día");//TODO: poner un mensaje con la opcion que se ha elegido 
+            Console.WriteLine("\nQue tenga un buen día");
         }
     }
 }
