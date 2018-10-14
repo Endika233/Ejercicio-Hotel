@@ -55,7 +55,6 @@ namespace Ejercicio_Hotel
         public static void RegistrarCliente()
         {
             Console.WriteLine("\n\tHa elegido la opción Registrar Cliente");
-            conexion.Open();
             string nomb, ape, dni;
             int cont=0;
             Console.WriteLine("\nIntroduzca nombre del cliente");
@@ -72,6 +71,7 @@ namespace Ejercicio_Hotel
                 dni = Console.ReadLine().ToUpper();
                 cont = cont + 1;
             } while (dni.Length!=9&&dni!="ESC");
+            conexion.Open();
             if (dni.Length == 9)
             {
                 cadena = "INSERT INTO HUESPED VALUES ('" + nomb + "', '" + ape + "', '" + dni + "')";
@@ -85,10 +85,10 @@ namespace Ejercicio_Hotel
         {
             Console.WriteLine("\n\tHa elegido la opción Editar Cliente");
             string dni,nomb,ape;
-            conexion.Open();            
             int cont = 0;
             bool ok = false;
             SqlDataReader match;
+            conexion.Open();            
             do
             {
                 if (cont > 0)
@@ -106,7 +106,7 @@ namespace Ejercicio_Hotel
                 }
                 cont++;
                 match.Close();
-            } while (!ok&&dni!="ESC");//TODO:Introducir en los bucles opción de salir
+            } while (!ok&&dni!="ESC");
             if (ok)
             {
                 Console.WriteLine("\nIntroduzca el nuevo nombre ");
@@ -116,7 +116,7 @@ namespace Ejercicio_Hotel
                 cadena = "UPDATE HUESPED SET nombre='" + nomb + "',apellido='" + ape + "' WHERE DNI LIKE '" + dni + "'";
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
-            }//TODO: has cambiado el bucle para que salga con esc, comprobar
+            }
             conexion.Close();
             Menu();
         }
@@ -125,10 +125,9 @@ namespace Ejercicio_Hotel
             Console.WriteLine("\n\tHa elegido la opción CheckIn");
             string dni;
             int habSel, newCodReserva=0;
-            conexion.Open();
-
             SqlDataReader match,codReserva;
            
+            conexion.Open();
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
             cadena = "SELECT * FROM HUESPED WHERE DNI LIKE '" + dni + "'";
@@ -150,7 +149,6 @@ namespace Ejercicio_Hotel
                     Console.Write(habitL["NumHab"]+"  ");//LA LISTA DE LAS HABITACIONES LIBRES
                 }
                 habitL.Close();
-                Console.WriteLine("\n");
                 habSel = Int32.Parse(Console.ReadLine());
                 cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
                 comando = new SqlCommand(cadena, conexion);
@@ -172,15 +170,14 @@ namespace Ejercicio_Hotel
             match.Close();
             conexion.Close();
             Menu();
-           
         }
         public static void CheckOut()
         {
             Console.WriteLine("\n\tHa elegido la opción CheckOut");
             string dni;
             SqlDataReader match;
-            conexion.Open();
 
+            conexion.Open();
             Console.WriteLine("\nIntroduzca el DNI del cliente(sin guion)");
             dni = Console.ReadLine();
             cadena = "SELECT * FROM RESERVAS WHERE CHECKOUT IS NULL AND DNI_HUESPED LIKE '" + dni + "'";
@@ -188,7 +185,7 @@ namespace Ejercicio_Hotel
             match = comando.ExecuteReader();
             if (!match.Read())
             {
-                Console.WriteLine("\nEl cliente no se encuentra en el hotel o no esta registrado");//TODO:tiene que comprobar que el checkout ultimo sea null
+                Console.WriteLine("\nEl cliente no se encuentra en el hotel o no esta registrado");
             }
             else
             {
@@ -208,6 +205,37 @@ namespace Ejercicio_Hotel
         {
             Console.WriteLine("\nQue tenga un buen día");
         }
+        //public static void VerHabs()
+        //{
+        //    int option,cont=0;
+        //    conexion.Open();
+        //    Console.WriteLine("\n\tHa seleccionado el menú Ver Habitaciones");
+        //    do
+        //    {
+        //        if (cont > 0)
+        //        {
+        //            Console.WriteLine("\nEl valor introducido no es válido, por favor introduzca otro");
+        //        }
+        //        Console.WriteLine("\nQue desea hacer (elija una de estas opciones):\n\n1 Ver todas las habitaciones\n2 Ver habitaciones ocupadas\n3Ver habitaciones vacias\n4 Salir");
+        //        option = Int32.Parse(Console.ReadLine());
+        //        cont++;
+        //    } while (option > 4 || option < 0);
+        //    switch (option)
+        //    {
+        //        case 1:
+                    
+        //            break;
+        //        case 2:
+                   
+        //            break;
+        //        case 3:
+                   
+        //            break;
+        //        case 4:                    
+        //            break;
+        //    }
+        //    conexion.Close();
+        //    }
     }
 }
 
