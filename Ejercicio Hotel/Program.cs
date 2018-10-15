@@ -154,12 +154,12 @@ namespace Ejercicio_Hotel
                 comando = new SqlCommand(cadena, conexion);
                 comando.ExecuteNonQuery();
                 
-                cadena = "SELECT MAX(CODRESERVA) FROM RESERVAS ";
+                cadena = "SELECT MAX(CODRESERVA) as 'CodReserva' FROM RESERVAS ";//Si no le damos un nombre aqui a la busqueda, dentro del if no funciona con el nombre porque no le asignas un nombre 'as'
                 comando = new SqlCommand(cadena, conexion);
                 codReserva=comando.ExecuteReader();
-                if (codReserva.Read())//TODO:preguntar porque hace falta el if 
+                if (codReserva.Read())//if aquí porque el programa no sabe si cogerá algún valor o no
                 {
-                    newCodReserva = Int32.Parse(codReserva[0].ToString())+1;// TODO: mirar porque esta fuera de rango con nombre de columna
+                    newCodReserva = Int32.Parse(codReserva["CodReserva"].ToString())+1;
                 }
                 codReserva.Close();
 
