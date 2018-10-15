@@ -148,6 +148,7 @@ namespace Ejercicio_Hotel
                 {
                     Console.Write(habitL["NumHab"]+"  ");//LA LISTA DE LAS HABITACIONES LIBRES
                 }
+                Console.WriteLine();
                 habitL.Close();
                 habSel = Int32.Parse(Console.ReadLine());
                 cadena = "UPDATE HABITACION SET ESTADO='o' WHERE NumHab = " + habSel ;
@@ -235,8 +236,7 @@ namespace Ejercicio_Hotel
         //            break;
         //    }
         //    conexion.Close();
-        //    }
-        //TODO:Hacer un método para comprobar si el dni esta en la bbdd(pero el mensaje a escribir en cada caso que se usa es diferente)
+        //    }        
     }
 }
 
